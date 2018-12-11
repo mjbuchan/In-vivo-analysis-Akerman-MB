@@ -1,8 +1,8 @@
 % Plasticity 
 
-LTP_expt_dir                = '/Volumes/Akermanlab/Joram/LTPtest'; % where are the data files? 
+LTP_expt_dir                = '/Users/matthewbuchan/Desktop/Scripts/Extracted data'; % where are the data files? 
 
-LTP_expt_day                = '2018_10_11'; % This script only deals with data from 1 day; it will read in pre and post files
+LTP_expt_day                = '2018_26_11'; % This script only deals with data from 1 day; it will read in pre and post files
 
 %%  parameters 
 whisk_resp_win    	= [0.005 0.200];    % Window for determining spiking responses (peak is determined within this time window; binned response is area under the psth curve in this window)
@@ -208,6 +208,7 @@ psth_mat_size                   = size(multi_expt_whisk_psth);
 multi_expt_whisk_psth           = [multi_expt_whisk_psth; NaN(1,psth_mat_size(2),psth_mat_size(3))];
     
 LFP_mat_size                    = size(multi_expt_whisk_LFP);
+
 multi_expt_whisk_LFP            = [multi_expt_whisk_LFP; NaN(1,LFP_mat_size(2),LFP_mat_size(3))];
 
 multi_expt_psth_vect            = [multi_expt_psth_vect; NaN(1,psth_mat_size(2),psth_mat_size(3))];
@@ -273,18 +274,18 @@ for a = 1:length(uniq_stims)
 end
 
 % some figure 
-for a = 1:4
-    figure(a)
-    set(gcf,'Units','Normalized')
-    set(gcf,'Position',[0 .4 1 .3])
-    % Set all y axes to the same range (based on the largest range)
-    plotaxes    = get(gcf,'Children');
-    % maxy        = cellfun(@max,get(plotaxes,'Ylim'));
-    
-    set(plotaxes,'XLim',[ -10, max(time_vect) + time_vect(1) + 10]) % add margin 
-    
-    hold off
-end
+% for a = 1:4
+%     figure(a)
+%     set(gcf,'Units','Normalized')
+%     set(gcf,'Position',[0 .4 1 .3])
+%     % Set all y axes to the same range (based on the largest range)
+%     plotaxes    = get(gcf,'Children');
+%     % maxy        = cellfun(@max,get(plotaxes,'Ylim'));
+%     
+%     set(plotaxes,'XLim',[ -10, max(time_vect) + time_vect(1) + 10]) % add margin 
+%     
+%     hold off
+% end
 
 
 

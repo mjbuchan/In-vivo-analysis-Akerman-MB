@@ -7,8 +7,8 @@ data_folder         = '/Volumes/PS2Akermanlab/Joram/Data/In vivo';   %'/Volumes/
 
 save_folder         = '/Users/matthewbuchan/Desktop/Scripts/Extracted data';  %/Volumes/Akermanlab-1/Joram/Extracted data'; % Where to save output?
 
-start_date          = '2018_11_19';     % format: 'yyyy_mm_dd'; Process files from this date onwards
-end_date            = '2018_11_20';     % format: 'yyyy_mm_dd'; Process files up until this date
+start_date          = '2018_11_26';     % format: 'yyyy_mm_dd'; Process files from this date onwards
+end_date            = '2018_11_26';     % format: 'yyyy_mm_dd'; Process files up until this date
 
 process_expts       = {'All'};          % indicate which experiment types to run, e.g.: {'Drive', 'Timing'}, or use {'All'}
 
