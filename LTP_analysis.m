@@ -1,17 +1,19 @@
 % Plasticity 
 
-LTP_expt_dir                = '/Users/matthewbuchan/Desktop/Scripts/Extracted data'; % where are the data files? 
+LTP_expt_dir                = '/Users/matthewbuchan/Desktop/Work/Scripts/Extracted data'; % where are the data files? 
 
-LTP_expt_day                = '2018_26_11'; % This script only deals with data from 1 day; it will read in pre and post files
+LTP_expt_day                = '2019_08_06'; % This script only deals with data from 1 day; it will read in pre and post files
 
-%%  parameters 
-whisk_resp_win    	= [0.005 0.200];    % Window for determining spiking responses (peak is determined within this time window; binned response is area under the psth curve in this window)
-whisk_trace_win     = [0.005 0.300];    % Window for what time window of the PSTH to plot
-
-whisk_P1_win        = [0.002 0.300];    % Window for determining the P1 LFP response (= maximum within this time window)
-whisk_N1_win        = [0.002 0.150];    % Window for determining the N1 LFP response (= minimum within this time window)
-n_per_point         = [10];              % How many repeats to average per data point; 1 = plot every data point individually
-target_channels     = [1:32];           % Which channels to analyse
+%%  parameters
+whisk_resp_win    	= [0.005 0.03];    % Window for what time window of the PSTH to plot
+whisk_trace_win     = [0.00 0.2];
+whisk_P1_win        = [0.000 0.300];    % Window for determining the P1 LFP response (= maximum within this time window)
+whisk_N1_win        = [0.000 0.300];    % Window for determining the N1 LFP response (= minimum within this time window)
+n_per_point         = [1];              % How many repeats to average per data point; 1 = plot every data point individually
+target_channels     = [1:6 9:12 15:26];           % Which channels to analyse
+% target_channels     = [1:6];
+% target_channels     = [9:12];
+% target_channels     = [15:26];
 
 hist_binsize        = 0.001;            % Bin size for psths
 rate_window         = [0.015];          % Window for gaussian smoothing for determining peak spike rate; currently not used apart from as input for ephys_data_psths function
@@ -29,7 +31,7 @@ expt_folders                = dir(LTP_expt_dir);
 qremove                     = ismember({expt_folders.name},{'.','..','.DS_Store'});
 expt_folders(qremove)       = [];
 
-q_test                      = ismember({expt_folders.name},{'Test_12_pre','Test_12_post_1','Test_12_post_2'});
+q_test                      = ismember({expt_folders.name},{ 'Test_1_pre_1', 'Test_1_pre', 'Test_1_post_1'});
 
 test_folders                = {expt_folders(q_test).name};
 
@@ -158,11 +160,11 @@ for b = 1:length(experiment_files)
             target_points        	= [1:n_per_point] + (d - 1) * n_per_point;
             
             %
-            if max(target_points) > size(cond_data.trial_rate_psths,2)
-                target_points   = [min(target_points):size(cond_data.trial_rate_psths,2)];
+            if max(target_points) > size(cond_data.trial_psths,2)
+                target_points   = [min(target_points):size(cond_data.trial_psths,2)];
             end
             
-            whisk_resp_selection    = smooth(squeeze(mean(mean(cond_data.trial_rate_psths(target_channels,target_points,q_whisk_win),1),2)),peak_smooth_win,'loess');
+            whisk_resp_selection    = smooth(squeeze(mean(mean(cond_data.trial_psths(target_channels,target_points,q_whisk_win),1),2)),peak_smooth_win,'loess');
             whisk_resp_binned(d)    = mean(whisk_resp_selection(:));
             whisk_peak_rate(d)      = max(whisk_resp_selection(:));
             
@@ -183,7 +185,7 @@ for b = 1:length(experiment_files)
         expt_whisk_P1           = [expt_whisk_P1 whisk_P1];
         expt_whisk_N1           = [expt_whisk_N1 whisk_N1];
         
-        expt_whisk_psth         = [expt_whisk_psth smooth(squeeze(mean(mean(cond_data.trial_rate_psths(target_channels,:,q_whisk_trace),1),2)),trace_smooth_win)];
+        expt_whisk_psth         = [expt_whisk_psth smooth(squeeze(mean(mean(cond_data.trial_psths(target_channels,:,q_whisk_trace),1),2)),trace_smooth_win)];
         expt_whisk_LFP          = [expt_whisk_LFP squeeze(mean(mean(cond_data.LFP_trace(target_channels,:,q_P1_win),1),2));];
         
         expt_whisk_psth_vect    = [expt_whisk_psth_vect linspace(expt_start_times(b),expt_end_times(b),size(expt_whisk_psth,1))'];
@@ -255,7 +257,7 @@ for a = 1:length(uniq_stims)
         plot(time_vect,this_whisk_peak,'.','MarkerSize',20,'Color',1-[0.2 0.2 0.2]*b)
         hold on
         plot(this_psth_vect(:),1.1*max_peak + this_whisk_psth(:)/2,'Color',1-[0.2 0.2 0.2]*b)
-        
+%         
         figure(3)
         subplot(1,2,a)
         title(['P1 whisk response stim ' num2str(a)])
@@ -270,9 +272,17 @@ for a = 1:length(uniq_stims)
         hold on
         plot(this_LFP_vect(:),1.1*max_peak + this_whisk_LFP(:)/2,'Color',1-[0.2 0.2 0.2]*b)
         
+        P2P = (this_whisk_P1-this_whisk_N1);
+        
+        figure(5)
+        subplot(1,2,a)
+        plot(time_vect, P2P, '.', 'MarkerSize',20,'Color',1-[0.2 0.2 0.2]*b)
+        hold on
+        plot(this_LFP_vect(:),1.1*max_peak + this_whisk_LFP(:)/2,'Color',1-[0.2 0.2 0.2]*b)
+        
     end
 end
-
+% 
 % some figure 
 % for a = 1:4
 %     figure(a)

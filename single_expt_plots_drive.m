@@ -2,9 +2,9 @@
 
 close all
 
-experiment          = sdata(5).expt;
+experiment          = 'Drive';
 
-summarise_channels  = [1:16]; % include these channels
+summarise_channels  = [1:32]; % include these channels
 split_conditions    = [1 5 6]; % split by these conditions, summarise over others
 
 split_plots         = [5 6]; % [4 6] works
