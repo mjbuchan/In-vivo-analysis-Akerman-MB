@@ -27,6 +27,10 @@ function line_handles = raster_plot(spike_data,split_dim,spacing)
 % Joram van Rheede - Jan 2019
 
 
+% MB altered plotting function - colormap limits normalised and set
+
+
+
 % Default to displaying the data by channel, pooling over N trials
 if nargin < 2
     split_dim = 1;
